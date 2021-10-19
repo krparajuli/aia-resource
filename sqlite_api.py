@@ -38,12 +38,12 @@ def get_users_by_id(id: int):
 def intro():
     return "<p>This is the registrar's app</p>"
 
-@app.route("/v0/users")
+@app.route("/v0/students")
 def users():
     return get_users()
 
 
-@app.route("/v0/users/<id>")
+@app.route("/v0/students/<id>")
 def get_user(id):
      return get_users_by_id(id)
 
