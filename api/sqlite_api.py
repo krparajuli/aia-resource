@@ -13,6 +13,7 @@ db = SQLAlchemy(app)
 
 db.Model.metadata.reflect(db.engine)
 
+
 class Student(db.Model):
     __tablename__ = 'students'
     __table_args__ = {'extend_existing': True}
@@ -29,7 +30,7 @@ def get_users():
     return str(retval)
 
 
-def get_users_by_id(id: int):
+def get_user_by_id(id: int):
     student = Student.query.filter_by(students_id=id).first()
     return str(student.as_dict())
 
@@ -38,6 +39,7 @@ def get_users_by_id(id: int):
 def intro():
     return "<p>This is the registrar's app</p>"
 
+
 @app.route("/v0/students")
 def users():
     return get_users()
@@ -45,10 +47,32 @@ def users():
 
 @app.route("/v0/students/<id>")
 def get_user(id):
-     return get_users_by_id(id)
+    return get_user_by_id(id)
 
 
 @app.route("/v1")
 def hello_v1():
     return intro()
 
+
+@app.route("/v1/students")
+def users_v1():
+    return get_users()
+
+
+@app.route("/v1/students/<id>")
+def get_user_v1(id):
+    return get_user_by_id(id)
+
+
+@app.route("/v2/")
+def intro_v2():
+    return intro()
+
+@app.route("/v2/students/")
+def users_v2():
+    return get_users()
+
+@app.route("/v2/students/<id>")
+def get_user_v2():
+    return get_user_by_id(id)

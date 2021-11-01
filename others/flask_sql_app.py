@@ -16,9 +16,10 @@ class Students(db.Model):
     country = db.Column(db.String(100))
     grade_letter = db.Column(db.String(10))
     grade_percent = db.Column(db.Integer)
+    password = db.Column(db.String(255))
 
     def __init__(self, id, name, phone, email, postal_zip,
-                 country, grade_letter, grade_percent):
+                 country, grade_letter, grade_percent, password):
         self.id = id
         self.name = name
         self.phone = phone
@@ -27,6 +28,7 @@ class Students(db.Model):
         self.country = country
         self.grade_letter = grade_letter
         self.grade_percent = grade_percent
+        self.password = password
 
 
 print(Students.query.all())
