@@ -29,10 +29,19 @@ def get_users():
     retval = [student.as_dict() for student in students_all]
     return str(retval)
 
-
-def get_user_by_id(id: int):
-    student = Student.query.filter_by(students_id=id).first()
+def get_user_by_uname(uname: str):
+    student = Student.query.filter_by(students_username=uname).first()
     return str(student.as_dict())
+
+
+def get_user_by_uname_pw(uname: str, pw: str):
+    student = Student.query.filter_by(students_username=uname).first()
+    if not student:
+        return "User not found"
+    if student.as_dict()["students_password"] != pw:
+        return "Username/Password does not match"
+    return str(student.as_dict())
+
 
 
 @app.route("/v0/")
@@ -45,9 +54,9 @@ def users():
     return get_users()
 
 
-@app.route("/v0/students/<id>")
-def get_user(id):
-    return get_user_by_id(id)
+@app.route("/v0/student/<uname>")
+def get_user(uname):
+    return get_user_by_uname(uname)
 
 
 @app.route("/v1")
@@ -60,19 +69,20 @@ def users_v1():
     return get_users()
 
 
-@app.route("/v1/students/<id>")
-def get_user_v1(id):
-    return get_user_by_id(id)
-
+@app.route("/v1/student/<uname>/password/<pw>")
+def get_user_v1(uname, pw):
+    return get_user_by_uname_pw(uname, pw)
 
 @app.route("/v2/")
 def intro_v2():
     return intro()
 
+
 @app.route("/v2/students/")
 def users_v2():
     return get_users()
 
-@app.route("/v2/students/<id>")
-def get_user_v2():
-    return get_user_by_id(id)
+
+@app.route("/v2/student/<uname>")
+def get_user_v2(uname):
+    return get_user_by_uname(uname)
