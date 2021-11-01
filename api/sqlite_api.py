@@ -84,7 +84,7 @@ def users_v1():
 
 @app.route("/v1/student/<uname>/password/<pw>")
 def get_user_v1(uname, pw):
-    return get_user_by_uname_pw(uname, pw)
+    return get_name_and_grades(uname, pw)
 
 @app.route("/v2/")
 def intro_v2():
