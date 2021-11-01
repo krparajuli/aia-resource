@@ -40,7 +40,20 @@ def get_user_by_uname_pw(uname: str, pw: str):
         return "User not found"
     if student.as_dict()["students_password"] != pw:
         return "Username/Password does not match"
-    return str(student.as_dict())
+    return student.as_dict()
+
+def get_name_and_grades(uname: str, pw: str):
+    user = get_user_by_uname_pw(uname, pw)
+    ret_dict = {}
+    ret_dict["username"] = user["username"]
+    ret_dict["name"]  =  user["name"]
+    ret_dict["email"] = user["students_email"]
+    ret_dict["grade_ics"] = user["students_grade_ics"]
+    ret_dict["grade_iis"] = user["students_grade_iis"]
+    ret_dict["grade_net_4ns"] = user["students_grade_4nsics"]
+    ret_dict["grade_aia"] = user["grade_aia"]
+    ret_dict["qpa"] = user["students_qpa"]
+    return ret_dict
 
 
 
