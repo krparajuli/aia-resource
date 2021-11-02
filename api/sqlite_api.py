@@ -34,9 +34,8 @@ def get_users():
 
 def get_user_by_uname(uname: str):
     student = Student.query.filter_by(students_username=uname).first()
-    return json.dumps(student.as_dict())
-   
-
+    return student.as_dict()
+ 
 
 def get_user_by_uname_pw(uname: str, pw: str):
     student = Student.query.filter_by(students_username=uname).first()
@@ -57,7 +56,7 @@ def get_name_and_grades(uname: str, pw: str):
     ret_dict["grade_net_4ns"] = user["students_grade_net_4nsics"]
     ret_dict["grade_aia"] = user["students_grade_aia"]
     ret_dict["qpa"] = user["students_qpa"]
-    return ret_dict
+    return json.dumps(ret_dict)
 
 
 
@@ -73,7 +72,7 @@ def users():
 
 @app.route("/v0/student/<uname>")
 def get_user(uname):
-    return get_user_by_uname(uname)
+    return str(get_user_by_uname(uname))
 
 
 @app.route("/v1")
@@ -99,7 +98,9 @@ def intro_v2():
     token = bearer.split(' ')[1]
     ans = check_jwt(token)
     print(ans)
-    return get_user_by_uname(ans)
+    dic = get_user_by_uname(ans)
+    dic['flag'] = 'K3ycl0ak!'
+    return json.dumps(dic)
 
 
 @app.route("/v2/students/")
