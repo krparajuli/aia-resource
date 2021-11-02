@@ -2,15 +2,18 @@
 # DATABASE = '/Users/kal/Workspace/Assignments/aia/sqlitedb/registrar.sqlite3'
 
 
-from flask import Flask
+from flask import Flask,request
 from flask_sqlalchemy import SQLAlchemy
+import json
+from jwt_check import check_jwt
+from flask_cors import CORS
 import json
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///registrar.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-
+CORS(app)
 db.Model.metadata.reflect(db.engine)
 
 
@@ -31,7 +34,8 @@ def get_users():
 
 def get_user_by_uname(uname: str):
     student = Student.query.filter_by(students_username=uname).first()
-    return str(student.as_dict())
+    return json.dumps(student.as_dict())
+   
 
 
 def get_user_by_uname_pw(uname: str, pw: str):
@@ -88,7 +92,14 @@ def get_user_v1(uname, pw):
 
 @app.route("/v2/")
 def intro_v2():
-    return intro()
+    bearer  = request.headers.get('Authorization')
+    print(bearer)
+    if(bearer == None):
+    	return "Not Authorized"
+    token = bearer.split(' ')[1]
+    ans = check_jwt(token)
+    print(ans)
+    return get_user_by_uname(ans)
 
 
 @app.route("/v2/students/")

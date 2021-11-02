@@ -1,2 +1,5 @@
 flask
+jwcrypto
+requests
+jwt
 flask_sqlalchemy

@@ -6,9 +6,8 @@ name = "pypi"
 [packages]
 Flask = "*"
 Flask-SQLAlchemy = "*"
-MySQL-python = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.9"
+python_version = "3.8"
