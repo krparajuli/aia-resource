@@ -30,7 +30,7 @@ class Student(db.Model):
 def get_users():
     students_all = Student.query.all()
     retval = [student.as_dict() for student in students_all]
-    return str(retval)
+    return retval
 
 
 def get_user_by_uname(uname: str):
@@ -58,20 +58,8 @@ def get_reduced_user_dict(user: dict):
                                        "students_qpa") if k in user}
 
 
-
-@app.route("/v0/")
 def intro():
     return "<p>This is the registrar's app</p>"
-
-
-@app.route("/v0/students")
-def users():
-    return get_users()
-
-
-@app.route("/v0/student/<uname>")
-def get_user(uname):
-    return str(get_user_by_uname(uname))
 
 
 @app.route("/v1")
@@ -81,7 +69,7 @@ def hello_v1():
 
 @app.route("/v1/students")
 def users_v1():
-    return get_users()
+    return str(get_users())
 
 
 @app.route("/v1/student/<uname>/password/<pw>")
@@ -90,7 +78,7 @@ def get_user_v1(uname, pw):
 
 
 @app.route("/v2/")
-def intro_v2():
+def get_v2_response():
     bearer = request.headers.get('Authorization')
     print(bearer)
 
@@ -105,12 +93,31 @@ def intro_v2():
     return user
 
 
-@app.route("/v2/students/")
-def users_v2():
-    all_users = get_users()
-    return [get_reduced_user_dict(user_dic) for user_dic in all_users]
 
 
-@app.route("/v2/student/<uname>")
-def get_user_v2(uname):
-    return get_user_by_uname(uname)
+
+#
+# @app.route("/v0/")
+# def intro():
+#     return "<p>This is the registrar's app</p>"
+#
+#
+# @app.route("/v0/students")
+# def users():
+#     return get_users()
+#
+#
+# @app.route("/v0/student/<uname>")
+# def get_user(uname):
+#     return str(get_user_by_uname(uname))
+
+
+# @app.route("/v2/students/")
+# def users_v2():
+#     all_users = get_users()
+#     return [get_reduced_user_dict(user_dic) for user_dic in all_users]
+#
+#
+# @app.route("/v2/student/<uname>")
+# def get_user_v2(uname):
+#     return get_user_by_uname(uname)
