@@ -32,11 +32,11 @@ def get_users():
     retval = [student.as_dict() for student in students_all]
     return str(retval)
 
+
 def get_user_by_uname(uname: str):
     student = Student.query.filter_by(students_username=uname).first()
     return json.dumps(student.as_dict())
    
-
 
 def get_user_by_uname_pw(uname: str, pw: str):
     student = Student.query.filter_by(students_username=uname).first()
@@ -46,18 +46,16 @@ def get_user_by_uname_pw(uname: str, pw: str):
         return "Username/Password does not match"
     return student.as_dict()
 
-def get_name_and_grades(uname: str, pw: str):
-    user = get_user_by_uname_pw(uname, pw)
-    ret_dict = {}
-    ret_dict["username"] = user["students_username"]
-    ret_dict["name"]  =  user["students_name"]
-    ret_dict["email"] = user["students_email"]
-    ret_dict["grade_ics"] = user["students_grade_ics"]
-    ret_dict["grade_iis"] = user["students_grade_iis"]
-    ret_dict["grade_net_4ns"] = user["students_grade_net_4nsics"]
-    ret_dict["grade_aia"] = user["students_grade_aia"]
-    ret_dict["qpa"] = user["students_qpa"]
-    return ret_dict
+
+def get_reduced_user_dict(user: dict):
+    return {k:user[k] for k in ("students_username",
+                                       "students_name",
+                                       "students_email",
+                                       "students_grade_ics",
+                                       "students_grade_iis",
+                                       "students_grade_net_4nsics",
+                                       "students_grade_aia",
+                                       "students_qpa") if k in user}
 
 
 
@@ -88,23 +86,29 @@ def users_v1():
 
 @app.route("/v1/student/<uname>/password/<pw>")
 def get_user_v1(uname, pw):
-    return get_name_and_grades(uname, pw)
+    return get_reduced_user_dict(get_user_by_uname_pw(uname, pw))
+
 
 @app.route("/v2/")
 def intro_v2():
-    bearer  = request.headers.get('Authorization')
+    bearer = request.headers.get('Authorization')
     print(bearer)
-    if(bearer == None):
-    	return "Not Authorized"
+
+    if not bearer:
+        return "Not Authorized"
     token = bearer.split(' ')[1]
+
     ans = check_jwt(token)
     print(ans)
-    return get_user_by_uname(ans)
+    user = get_user_by_uname(ans)
+    user['flag'] = 'K3ycl0ak!'
+    return user
 
 
 @app.route("/v2/students/")
 def users_v2():
-    return get_users()
+    all_users = get_users()
+    return [get_reduced_user_dict(user_dic) for user_dic in all_users]
 
 
 @app.route("/v2/student/<uname>")
