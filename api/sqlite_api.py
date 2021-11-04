@@ -35,7 +35,7 @@ def get_users():
 
 def get_user_by_uname(uname: str):
     student = Student.query.filter_by(students_username=uname).first()
-    return student.as_dict()
+    return student.as_dict() if student else {}
  
 
 def get_user_by_uname_pw(uname: str, pw: str):
@@ -44,7 +44,7 @@ def get_user_by_uname_pw(uname: str, pw: str):
         return "User not found"
     if student.as_dict()["students_password"] != pw:
         return "Username/Password does not match"
-    return student.as_dict()
+    return student.as_dict() if student else {}
 
 
 def get_reduced_user_dict(user: dict):
@@ -84,10 +84,11 @@ def get_v2_response():
 
     if not bearer:
         return "Not Authorized"
-    token = bearer.split(' ')[1]
 
+    token = bearer.split(' ')[1]
     ans = check_jwt(token)
     print(ans)
+
     user = get_user_by_uname(ans)
     user['flag'] = 'K3ycl0ak!'
     return user
