@@ -35,8 +35,8 @@ def get_users():
 
 def get_user_by_uname(uname: str):
     student = Student.query.filter_by(students_username=uname).first()
-    return json.dumps(student.as_dict())
-   
+    return student.as_dict()
+ 
 
 def get_user_by_uname_pw(uname: str, pw: str):
     student = Student.query.filter_by(students_username=uname).first()
@@ -71,7 +71,7 @@ def users():
 
 @app.route("/v0/student/<uname>")
 def get_user(uname):
-    return get_user_by_uname(uname)
+    return str(get_user_by_uname(uname))
 
 
 @app.route("/v1")
