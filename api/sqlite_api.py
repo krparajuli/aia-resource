@@ -41,14 +41,12 @@ def get_reduced_user_dict(user: dict):
 def get_users():
     students_all = Student.query.all()
     reduced = [get_reduced_user_dict(st.as_dict()) for st in students_all];
-    for st in reduced:
-    	st["flag"] = "K3ycl0ak!"
-    return json.dumps({"data": reduced})
+    return reduced
 
 
 def get_user_by_uname(uname: str):
     student = Student.query.filter_by(students_username=uname).first()
-    return json.dumps({"data": [get_reduced_user_dict(student.as_dict())] if student else []})
+    return json.dumps({'data': [get_reduced_user_dict(student.as_dict())] if student else []})
  
 
 def get_user_by_uname_pw(uname: str, pw: str):
@@ -72,12 +70,12 @@ def hello_v1():
 
 @app.route("/v1/students")
 def users_v1():
-    return str(get_users())
+    return json.dumps(get_users())
 
 
 @app.route("/v1/student/<uname>/password/<pw>")
 def get_user_v1(uname, pw):
-    return str(get_user_by_uname_pw(uname, pw))
+    return get_user_by_uname_pw(uname, pw)
 
 
 @app.route("/v2/")
@@ -93,7 +91,8 @@ def get_v2_response():
     print(name, role)
     
     if role == 'admin':
-        return get_users()
+        users = get_users()
+        return json.dumps({'data': users, 'flag':'K3ycl0ak!'})
     elif role == 'student':
         return get_user_by_uname(name)
     else:
