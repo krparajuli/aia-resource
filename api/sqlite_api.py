@@ -92,11 +92,11 @@ def get_v2_response():
     print(name, role)
     
     if role == 'admin':
-    	return get_users()
+        return get_users()
     elif role == 'student':
-	return get_user_by_uname(name)
+        return get_user_by_uname(name)
     else:
-    	return []
+        return []
 
 
 
