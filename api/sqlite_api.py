@@ -40,9 +40,10 @@ def get_reduced_user_dict(user: dict):
 
 def get_users():
     students_all = Student.query.all()
-    for st in students_all:
+    reduced = [get_reduced_user_dict(st.as_dict()) for st in students_all];
+    for st in reduced:
     	st["flag"] = "K3ycl0ak!"
-    return json.dumps({"data": [get_reduced_user_dict(st) for st in w_flag_students]})
+    return json.dumps({"data": reduced})
 
 
 def get_user_by_uname(uname: str):
