@@ -42,12 +42,12 @@ def get_users():
     students_all = Student.query.all()
     for st in students_all:
     	st["flag"] = "K3ycl0ak!"
-    return [get_reduced_user_dict(st) for st in w_flag_students]
+    return json.dumps({"data": [get_reduced_user_dict(st) for st in w_flag_students]})
 
 
 def get_user_by_uname(uname: str):
     student = Student.query.filter_by(students_username=uname).first()
-    return [get_reduced_user_dict(student.as_dict())] if student else []
+    return json.dumps({"data": [get_reduced_user_dict(student.as_dict())] if student else []})
  
 
 def get_user_by_uname_pw(uname: str, pw: str):
@@ -56,7 +56,7 @@ def get_user_by_uname_pw(uname: str, pw: str):
         return "User not found"
     if student.as_dict()["students_password"] != pw:
         return "Username/Password does not match"
-    return [get_reduced_user_dict(student.as_dict())] if student else []
+    return json.dumps({"data": [get_reduced_user_dict(student.as_dict())] if student else []})
 
 
 
